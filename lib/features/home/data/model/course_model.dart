@@ -1,17 +1,18 @@
-import 'package:intl/intl.dart';
-
 class CourseResponseModel {
   final List<CourseModel> courses;
 
-  CourseResponseModel({this.courses = const []});
+  const CourseResponseModel({this.courses = const []});
 
   factory CourseResponseModel.fromJson(Map<String, dynamic> json) {
+    final dynamic coursesJson = json['courses'];
+
     return CourseResponseModel(
-      courses:
-          (json['courses'] as List<dynamic>?)
-              ?.map((course) => CourseModel.fromJson(course))
-              .toList() ??
-          [],
+      courses: coursesJson is List
+          ? coursesJson
+                .whereType<Map>()
+                .map((course) => CourseModel.fromJson(course))
+                .toList()
+          : const [],
     );
   }
 
@@ -36,37 +37,59 @@ class CourseModel {
   final String totalClass;
   final int totalExam;
   final int totalLive;
-  final String orderStatus;
+  final bool orderStatus;
 
-  CourseModel({
-    this.id = 0,
-    this.title = '',
-    this.subTitle = '',
-    this.price = 0,
-    this.banner = '',
-    this.discountType = 0,
-    this.discountAmount = 0,
-    this.discountStartDate,
-    this.discountEndDate,
-    this.altText = '',
-    this.bannerTitle = '',
-    this.durationInMonth = '',
-    this.totalClass = '',
-    this.totalExam = 0,
-    this.totalLive = 0,
-    this.orderStatus = 'false',
+  const CourseModel({
+    required this.id,
+    required this.title,
+    required this.subTitle,
+    required this.price,
+    required this.banner,
+    required this.discountType,
+    required this.discountAmount,
+    required this.discountStartDate,
+    required this.discountEndDate,
+    required this.altText,
+    required this.bannerTitle,
+    required this.durationInMonth,
+    required this.totalClass,
+    required this.totalExam,
+    required this.totalLive,
+    required this.orderStatus,
   });
 
-  bool get hasActiveDiscount {
-    final DateTime now = DateTime.now();
+  factory CourseModel.fromJson(Map<dynamic, dynamic> json) {
+    return CourseModel(
+      id: _toInt(json['id']),
+      title: _toString(json['title']),
+      subTitle: _toString(json['sub_title']),
+      price: _toInt(json['price']),
+      banner: _toString(json['banner']),
+      discountType: _toInt(json['discount_type']),
+      discountAmount: _toInt(json['discount_amount']),
+      discountStartDate: _toDateTime(json['discount_start_date']),
+      discountEndDate: _toDateTime(json['discount_end_date']),
+      altText: _toString(json['alt_text']),
+      bannerTitle: _toString(json['banner_title']),
+      durationInMonth: _toString(json['duration_in_month']),
+      totalClass: _toString(json['total_class']),
+      totalExam: _toInt(json['total_exam']),
+      totalLive: _toInt(json['total_live']),
+      orderStatus: _toBool(json['order_status']),
+    );
+  }
 
-    if (discountAmount <= 0 ||
-        discountStartDate == null ||
-        discountEndDate == null) {
+  bool get hasActiveDiscount {
+    if (discountType == 0 || discountAmount <= 0 || discountEndDate == null) {
       return false;
     }
 
-    return now.isAfter(discountStartDate!) && now.isBefore(discountEndDate!);
+    final DateTime now = DateTime.now();
+    final bool hasStarted =
+        discountStartDate == null || !now.isBefore(discountStartDate!);
+    final bool hasNotEnded = now.isBefore(discountEndDate!);
+
+    return hasStarted && hasNotEnded;
   }
 
   int get payablePrice {
@@ -74,31 +97,14 @@ class CourseModel {
       return price;
     }
 
-    return (price - discountAmount).clamp(0, price);
+    final int discount = discountType == 2
+        ? (price * discountAmount / 100).round()
+        : discountAmount;
+
+    return (price - discount).clamp(0, price);
   }
 
-  String get heroTag => 'course_banner_$id';
-
-  factory CourseModel.fromJson(Map<String, dynamic> json) {
-    return CourseModel(
-      id: _parseInt(json['id']),
-      title: json['title']?.toString() ?? '',
-      subTitle: json['sub_title']?.toString() ?? '',
-      price: _parseInt(json['price']),
-      banner: json['banner']?.toString() ?? '',
-      discountType: _parseInt(json['discount_type']),
-      discountAmount: _parseInt(json['discount_amount']),
-      discountStartDate: _parseDate(json['discount_start_date']),
-      discountEndDate: _parseDate(json['discount_end_date']),
-      altText: json['alt_text']?.toString() ?? '',
-      bannerTitle: json['banner_title']?.toString() ?? '',
-      durationInMonth: json['duration_in_month']?.toString() ?? '',
-      totalClass: json['total_class']?.toString() ?? '',
-      totalExam: _parseInt(json['total_exam']),
-      totalLive: _parseInt(json['total_live']),
-      orderStatus: json['order_status']?.toString() ?? 'false',
-    );
-  }
+  String get heroTag => 'course-banner-$id';
 
   Map<String, dynamic> toJson() {
     return {
@@ -109,41 +115,61 @@ class CourseModel {
       'banner': banner,
       'discount_type': discountType,
       'discount_amount': discountAmount,
-      'discount_start_date': _formatDate(discountStartDate),
-      'discount_end_date': _formatDate(discountEndDate),
+      'discount_start_date': _formatDateTime(discountStartDate),
+      'discount_end_date': _formatDateTime(discountEndDate),
       'alt_text': altText,
       'banner_title': bannerTitle,
       'duration_in_month': durationInMonth,
       'total_class': totalClass,
       'total_exam': totalExam,
       'total_live': totalLive,
-      'order_status': orderStatus,
+      'order_status': orderStatus.toString(),
     };
   }
 
-  static int _parseInt(dynamic value) {
+  static String _toString(dynamic value) {
+    return value?.toString() ?? '';
+  }
+
+  static int _toInt(dynamic value) {
     if (value is int) {
       return value;
+    }
+    if (value is num) {
+      return value.toInt();
     }
 
     return int.tryParse(value?.toString() ?? '') ?? 0;
   }
 
-  static DateTime? _parseDate(dynamic value) {
-    final String date = value?.toString() ?? '';
+  static bool _toBool(dynamic value) {
+    if (value is bool) {
+      return value;
+    }
 
+    return value?.toString().toLowerCase() == 'true';
+  }
+
+  static DateTime? _toDateTime(dynamic value) {
+    final String date = value?.toString() ?? '';
     if (date.isEmpty) {
       return null;
     }
 
-    return DateFormat('yyyy-MM-dd HH:mm').tryParse(date);
+    return DateTime.tryParse(date.replaceFirst(' ', 'T'));
   }
 
-  static String? _formatDate(DateTime? value) {
-    if (value == null) {
+  static String? _formatDateTime(DateTime? dateTime) {
+    if (dateTime == null) {
       return null;
     }
 
-    return DateFormat('yyyy-MM-dd HH:mm').format(value);
+    final String year = dateTime.year.toString().padLeft(4, '0');
+    final String month = dateTime.month.toString().padLeft(2, '0');
+    final String day = dateTime.day.toString().padLeft(2, '0');
+    final String hour = dateTime.hour.toString().padLeft(2, '0');
+    final String minute = dateTime.minute.toString().padLeft(2, '0');
+
+    return '$year-$month-$day $hour:$minute';
   }
 }
