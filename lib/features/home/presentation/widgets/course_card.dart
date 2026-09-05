@@ -6,13 +6,15 @@ import 'package:demo_project1/helpers/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CourseCard extends StatefulWidget {
   final CourseModel course;
   final VoidCallback onTap;
 
   const CourseCard({super.key, required this.course, required this.onTap});
+
+  static const String courseBannerUrl =
+      'https://storage.biddabari.online/biddabari-bucket/backend/assets/uploaded-files/course/course-banners/courses-1785592301-771938478695716.webp';
 
   @override
   State<CourseCard> createState() => _CourseCardState();
@@ -65,7 +67,7 @@ class _CourseCardState extends State<CourseCard> {
               child: ClipRRect(
                 borderRadius: BorderRadius.vertical(top: Radius.circular(8.r)),
                 child: CachedNetworkImage(
-                  imageUrl: course.banner,
+                  imageUrl: CourseCard.courseBannerUrl,
                   height: 160.h,
                   width: double.infinity,
                   fit: BoxFit.cover,
@@ -97,7 +99,7 @@ class _CourseCardState extends State<CourseCard> {
                     course.title,
                     maxLines: 2,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c222222,
                       fontSize: 16.sp,
                       fontWeight: FontWeight.w700,
@@ -109,7 +111,7 @@ class _CourseCardState extends State<CourseCard> {
                     course.subTitle,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c6B6B6B,
                       fontSize: 13.sp,
                       fontWeight: FontWeight.w500,
@@ -120,7 +122,7 @@ class _CourseCardState extends State<CourseCard> {
                     children: [
                       Text(
                         '৳ ${course.payablePrice}',
-                        style: GoogleFonts.anekBangla(
+                        style: TextStyle(
                           color: AppColors.c0F9D69,
                           fontSize: 18.sp,
                           fontWeight: FontWeight.w800,
@@ -130,7 +132,7 @@ class _CourseCardState extends State<CourseCard> {
                         UIHelper.horizontalSpace(8.w),
                         Text(
                           '৳ ${course.price}',
-                          style: GoogleFonts.anekBangla(
+                          style: TextStyle(
                             color: AppColors.c8B8A8C,
                             fontSize: 13.sp,
                             fontWeight: FontWeight.w600,
@@ -162,7 +164,7 @@ class _CourseCardState extends State<CourseCard> {
                         ),
                         child: Text(
                           controller.remainingText.value,
-                          style: GoogleFonts.anekBangla(
+                          style: TextStyle(
                             color: AppColors.c1A4878,
                             fontSize: 12.sp,
                             fontWeight: FontWeight.w700,

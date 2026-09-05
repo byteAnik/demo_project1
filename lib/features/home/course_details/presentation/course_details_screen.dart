@@ -6,10 +6,12 @@ import 'package:demo_project1/helpers/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CourseDetailsScreen extends StatelessWidget {
   const CourseDetailsScreen({super.key});
+
+  static const String _courseBannerUrl =
+      'https://storage.biddabari.online/biddabari-bucket/backend/assets/uploaded-files/course/course-banners/courses-1785592301-771938478695716.webp';
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +31,7 @@ class CourseDetailsScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text(
           'Course Details',
-          style: GoogleFonts.anekBangla(
+          style: TextStyle(
             color: AppColors.c222222,
             fontSize: 18.sp,
             fontWeight: FontWeight.w700,
@@ -45,7 +47,7 @@ class CourseDetailsScreen extends StatelessWidget {
             Hero(
               tag: course.heroTag,
               child: CachedNetworkImage(
-                imageUrl: course.banner,
+                imageUrl: _courseBannerUrl,
                 height: 230.h,
                 width: double.infinity,
                 fit: BoxFit.cover,
@@ -64,7 +66,7 @@ class CourseDetailsScreen extends StatelessWidget {
                 children: [
                   Text(
                     course.title,
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c222222,
                       fontSize: 22.sp,
                       fontWeight: FontWeight.w800,
@@ -74,7 +76,7 @@ class CourseDetailsScreen extends StatelessWidget {
                   UIHelper.verticalSpace(8.h),
                   Text(
                     course.subTitle,
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c6B6B6B,
                       fontSize: 14.sp,
                       fontWeight: FontWeight.w500,
@@ -83,7 +85,7 @@ class CourseDetailsScreen extends StatelessWidget {
                   UIHelper.verticalSpace(16.h),
                   Text(
                     '৳ ${course.payablePrice}',
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c0F9D69,
                       fontSize: 26.sp,
                       fontWeight: FontWeight.w800,
@@ -128,7 +130,7 @@ class _DetailsRow extends StatelessWidget {
         children: [
           Text(
             label,
-            style: GoogleFonts.anekBangla(
+            style: TextStyle(
               color: AppColors.c6B6B6B,
               fontSize: 14.sp,
               fontWeight: FontWeight.w600,
@@ -136,7 +138,7 @@ class _DetailsRow extends StatelessWidget {
           ),
           Text(
             value,
-            style: GoogleFonts.anekBangla(
+            style: TextStyle(
               color: AppColors.c222222,
               fontSize: 14.sp,
               fontWeight: FontWeight.w700,

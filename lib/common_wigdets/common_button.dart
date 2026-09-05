@@ -2,7 +2,6 @@ import 'package:demo_project1/constants/app_colors.dart';
 import 'package:demo_project1/helpers/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class CommonButton extends StatelessWidget {
   final String text;
@@ -41,7 +40,7 @@ class CommonButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final textWidget = Text(
       text,
-      style: GoogleFonts.anekBangla(
+      style: TextStyle(
         fontSize: 16.sp,
         fontWeight: FontWeight.w500,
         color: textColor ?? AppColors.cFFFFFF,

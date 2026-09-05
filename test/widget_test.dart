@@ -5,7 +5,6 @@ import 'package:demo_project1/features/home/data/repository/course_repository.da
 import 'package:demo_project1/features/home/getx_controller/home_controller.dart';
 import 'package:demo_project1/features/home/presentation/home_screen.dart';
 import 'package:demo_project1/helpers/di.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';

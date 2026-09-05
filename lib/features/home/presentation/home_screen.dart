@@ -6,7 +6,6 @@ import 'package:demo_project1/helpers/ui_helpers.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -30,7 +29,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   Text(
                     'Courses',
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c222222,
                       fontSize: 24.sp,
                       fontWeight: FontWeight.w800,
@@ -60,7 +59,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   child: Text(
                     'You are offline. Cached courses are showing.',
-                    style: GoogleFonts.anekBangla(
+                    style: TextStyle(
                       color: AppColors.c2A120D,
                       fontSize: 12.sp,
                       fontWeight: FontWeight.w700,
@@ -150,7 +149,7 @@ class _StateMessage extends StatelessWidget {
             Text(
               title,
               textAlign: TextAlign.center,
-              style: GoogleFonts.anekBangla(
+              style: TextStyle(
                 color: AppColors.c222222,
                 fontSize: 18.sp,
                 fontWeight: FontWeight.w800,
@@ -160,14 +159,14 @@ class _StateMessage extends StatelessWidget {
             Text(
               message,
               textAlign: TextAlign.center,
-              style: GoogleFonts.anekBangla(
+              style: TextStyle(
                 color: AppColors.c6B6B6B,
                 fontSize: 13.sp,
                 fontWeight: FontWeight.w500,
               ),
             ),
             UIHelper.verticalSpace(16.h),
-            CommonButton(text: 'Retry', onPressed: () {}),
+            CommonButton(text: 'Retry', onPressed: onRetry),
           ],
         ),
       ),

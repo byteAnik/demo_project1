@@ -2,7 +2,7 @@ import 'package:auto_animated/auto_animated.dart';
 import 'package:demo_project1/constants/app_colors.dart';
 import 'package:demo_project1/constants/custome_theme.dart';
 import 'package:demo_project1/features/home/binding/home_binding.dart';
-import 'package:demo_project1/features/home/presentation/course_details_screen.dart';
+import 'package:demo_project1/features/home/course_details/presentation/course_details_screen.dart';
 import 'package:demo_project1/features/home/presentation/home_screen.dart';
 import 'package:demo_project1/helpers/di.dart';
 import 'package:demo_project1/helpers/helper_methods.dart';
