@@ -1,7 +1,9 @@
 import 'package:auto_animated/auto_animated.dart';
 import 'package:demo_project1/constants/app_colors.dart';
 import 'package:demo_project1/constants/custome_theme.dart';
-import 'package:demo_project1/features/contact_list/presentation/contact_list_screen.dart';
+import 'package:demo_project1/features/home/binding/home_binding.dart';
+import 'package:demo_project1/features/home/presentation/course_details_screen.dart';
+import 'package:demo_project1/features/home/presentation/home_screen.dart';
 import 'package:demo_project1/helpers/di.dart';
 import 'package:demo_project1/helpers/helper_methods.dart';
 import 'package:demo_project1/helpers/navigation_service.dart';
@@ -9,7 +11,7 @@ import 'package:demo_project1/helpers/register_provider.dart';
 import 'package:demo_project1/networks/dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
 import 'package:provider/provider.dart';
 
@@ -74,8 +76,20 @@ class UtillScreenMobile extends StatelessWidget {
           builder: (context, widget) {
             return MediaQuery(data: MediaQuery.of(context), child: widget!);
           },
+          initialBinding: HomeBinding(),
+          getPages: [
+            GetPage(
+              name: '/home',
+              page: () => const HomeScreen(),
+              binding: HomeBinding(),
+            ),
+            GetPage(
+              name: '/course-details',
+              page: () => const CourseDetailsScreen(),
+            ),
+          ],
           navigatorKey: NavigationService.navigatorKey,
-          home: ContactListScreen(),
+          home: const HomeScreen(),
         );
       },
     );

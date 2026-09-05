@@ -1,30 +1,58 @@
-// This is a basic Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+import 'dart:io';
 
+import 'package:demo_project1/features/home/data/model/course_model.dart';
+import 'package:demo_project1/features/home/data/repository/course_repository.dart';
+import 'package:demo_project1/features/home/getx_controller/home_controller.dart';
+import 'package:demo_project1/features/home/presentation/home_screen.dart';
+import 'package:demo_project1/helpers/di.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_test/flutter_test.dart';
-
-import 'package:demo_project1/main.dart';
+import 'package:get/get.dart';
+import 'package:get_storage/get_storage.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
-    await tester.pumpWidget(const MyApp());
+  setUpAll(() async {
+    final Directory tempDir = await Directory.systemTemp.createTemp(
+      'demo_project1_test',
+    );
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    TestDefaultBinaryMessengerBinding.instance.defaultBinaryMessenger
+        .setMockMethodCallHandler(
+          const MethodChannel('plugins.flutter.io/path_provider'),
+          (MethodCall methodCall) async {
+            return tempDir.path;
+          },
+        );
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    await GetStorage.init();
+    diSetup();
   });
+
+  tearDown(() {
+    Get.reset();
+  });
+
+  testWidgets('Shows course home screen', (WidgetTester tester) async {
+    Get.put(HomeController(repository: _FakeCourseRepository()));
+
+    await tester.pumpWidget(
+      ScreenUtilInit(
+        designSize: const Size(375, 812),
+        builder: (_, child) {
+          return const GetMaterialApp(home: HomeScreen());
+        },
+      ),
+    );
+
+    expect(find.text('Courses'), findsOneWidget);
+  });
+}
+
+class _FakeCourseRepository extends CourseRepository {
+  @override
+  Future<CourseResponseModel> fetchCourses() async {
+    return CourseResponseModel();
+  }
 }
